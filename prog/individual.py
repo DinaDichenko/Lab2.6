@@ -3,8 +3,6 @@
 
 import datetime
 import sys
-from datetime import time
-from xmlrpc.client import DateTime, _datetime
 
 if __name__ == '__main__':
     poezd = []
@@ -18,7 +16,8 @@ if __name__ == '__main__':
         elif command == 'add':
             name = input("Название пункта назначения? ")
             no = input("Номер поезда? ")
-            t = datetime.datetime.strptime(input("Время отправления (ММ/ДД/ГГ ЧЧ:ММ)? "),'%m/%d/%y %H:%M')
+            time_str = input("Введите время отправления (чч:мм:)\n")
+            t =  datetime.datetime.strptime(time_str, '%H:%M').time()
 
             # Создать словарь.
             po = {
@@ -37,25 +36,25 @@ if __name__ == '__main__':
             # Заголовок таблицы.
             line = '+-{}-+-{}-+-{}-+'.format(
                 '-' * 10,
-                '-' * 30,
-                '-' * 19,
+                '-' * 20,
+                '-' * 8,
             )
             print(line)
             print(
-                '| {:^10} | {:^30} | {:^19} |'.format(
+                '| {:^10} | {:^20} | {:^8} |'.format(
                     " No ",
                     "Название",
-                    "Время отправлнения"
+                    "Время"
                 )
             )
             print(line)
 
             for idx, po in enumerate(poezd, 1):
                 print(
-                    '| {:>10} | {:<30} | {'           '} |'.format(
+                    '| {:>10} | {:<20} | {''} |'.format(
                         po.get('no', ''),
                         po.get('name', ''),
-                        po.get('t')
+                        po['t']
                     )
                 )
             print(line)
@@ -65,8 +64,8 @@ if __name__ == '__main__':
             nom = input("Введите номер поезда: ")
             for idx, po in enumerate(poezd, 1):
                 if po['no'] == str(nom):
-                    print(po)
-                    count+=1
+                    print("Название пункта: ", po['name'], "\nВремя отправления: ", po['t'])
+                    count += 1
 
             if count == 0:
                 print("Поезда с таким номером нет")
